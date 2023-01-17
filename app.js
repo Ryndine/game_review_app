@@ -3,7 +3,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const Campground = require('./models/campground')
 
-mongoose.set('strictQuery', false);
+mongoose.set('strictQuery', false); // deprecation warning 
 mongoose.connect('mongodb://localhost:27017/campground-app', {
     // useNewUrlParser: true, (no longer supported, always true)
     // useCreateIndex: true, (no longer supported, always true)
@@ -29,10 +29,9 @@ app.get('/', (req, res) => {
     res.render('home')
 })
 
-app.get('/makecampground', async (req, res) => {
-    const camp = new Campground({title: 'My backyeard', description: 'Very small.'});
-    await camp.save();
-    res.send(camp)
+app.get('/campgrounds', async (req, res) => {
+    const campgrounds = await Campground.find({})
+    res.render('campgrounds/index', { campgrounds })
 })
 
 app.listen(3000, () => {
