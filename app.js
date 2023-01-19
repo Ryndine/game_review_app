@@ -3,10 +3,10 @@ const path = require('path');
 const mongoose = require('mongoose');
 const engine = require('ejs-mate');
 const methodOverride = require('method-override');
-const Campground = require('./models/campground');
+const GameReviews = require('./models/gamereview');
 
 mongoose.set('strictQuery', false); // deprecation warning 
-mongoose.connect('mongodb://localhost:27017/campground-app', {
+mongoose.connect('mongodb://localhost:27017/gamereview-app', {
     // useNewUrlParser: true, (no longer supported, always true)
     // useCreateIndex: true, (no longer supported, always true)
     // useUnifiedTopology: true (no longer supported, always true)
@@ -19,7 +19,6 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {
     console.log('Database connected');
 });
-
 
 const app = express();
 
@@ -36,45 +35,45 @@ app.get('/', (req, res) => {
     res.render('home')
 });
 
-// list of all the campgrounds
-app.get('/campgrounds', async(req, res) => {
-    const campgrounds = await Campground.find({});
-    res.render('campgrounds/index', { campgrounds });
+// list of all the gamereviews
+app.get('/gamereviews', async(req, res) => {
+    const gamereviews = await GameReviews.find({});
+    res.render('gamereviews/index', { gamereviews });
 });
 
-// create new campground
-app.get('/campgrounds/new', (req, res) => {
-    res.render('campgrounds/new');
+// create new game
+app.get('/gamereviews/new', (req, res) => {
+    res.render('gamereviews/new');
 })
 
-app.post('/campgrounds', async(req, res) => {
-    const campground = new Campground(req.body.campground);
-    await campground.save();
-    res.redirect(`/campgrounds/${campground._id}`);
+app.post('/gamereviews', async(req, res) => {
+    const game = new GameReviews(req.body.game);
+    await game.save();
+    res.redirect(`/gamereviews/${game._id}`);
 })
 
-// view a single campground
-app.get('/campgrounds/:id', async(req, res) => {
-    const campground = await Campground.findById(req.params.id);
-    res.render('campgrounds/show', { campground });
+// view a single game
+app.get('/gamereviews/:id', async(req, res) => {
+    const game = await GameReviews.findById(req.params.id);
+    res.render('gamereviews/show', { game });
 });
 
-// edit campground
-app.get('/campgrounds/:id/edit', async(req, res) => {
-    const campground = await Campground.findById(req.params.id);
-    res.render('campgrounds/edit', { campground });
+// edit game
+app.get('/gamereviews/:id/edit', async(req, res) => {
+    const game = await GameReviews.findById(req.params.id);
+    res.render('gamereviews/edit', { game });
 })
 
-app.put('/campgrounds/:id', async(req, res) => {
+app.put('/gamereviews/:id', async(req, res) => {
     const { id } = req.params;
-    const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
-    res.redirect(`/campgrounds/${campground._id}`)
+    const game = await GameReviews.findByIdAndUpdate(id, { ...req.body.game });
+    res.redirect(`/gamereviews/${game._id}`)
 });
 
-app.delete('/campgrounds/:id', async(req, res) => {
+app.delete('/gamereviews/:id', async(req, res) => {
     const { id } = req.params;
-    await Campground.findByIdAndDelete(id);
-    res.redirect('/campgrounds')
+    await GameReviews.findByIdAndDelete(id);
+    res.redirect('/gamereviews')
 })
 
 

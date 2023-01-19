@@ -1,0 +1,15 @@
+<% layout('layouts/boilerplate') %> 
+<form action="/gamereviews" method="POST">
+    <div>
+        <label for="title">Title</label>
+        <!-- game[title] groups content sent in POST under "game" -->
+        <input type="text" name="game[title]" id="title">
+    </div>
+    <div>
+        <label for="company">Company</label>
+        <!-- game[title] groups content sent in POST under "game" -->
+        <input type="text" name="game[company]" id="company">
+    </div>
+    <button>Add Game</button>
+</form>
+<a href="/gamereviews">All Games</a>

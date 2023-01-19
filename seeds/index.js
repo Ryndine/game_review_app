@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
-const cities = require('./cities')
-const {places, descriptors} = require('./seedHelpers')
-const Campground = require('../models/campground')
+const companies = require('./mockData')
+const {tags, descriptors} = require('./seedHelpers')
+const GameReviews = require('../models/gamereview')
 
 mongoose.set('strictQuery', false); // deprecation warning 
-mongoose.connect('mongodb://localhost:27017/campground-app', {
+mongoose.connect('mongodb://localhost:27017/gamereview-app', {
     // useNewUrlParser: true, (no longer supported, always true)
     // useCreateIndex: true, (no longer supported, always true)
     // useUnifiedTopology: true (no longer supported, always true)
@@ -23,18 +23,18 @@ const sample = array => array[Math.floor(Math.random() * array.length)];
 
 // seeding database
 const seedDB = async() => {
-    await Campground.deleteMany({});
+    await GameReviews.deleteMany({});
     for(let i = 0; i < 50; i++){
         const random1000 = Math.floor(Math.random() * 1000)
         const price = Math.floor(Math.random() * 20 + 10)
-        const camp = new Campground({
-            location: `${cities[random1000].city}, ${cities[random1000].state}`,
-            title: `${sample(descriptors)} ${sample(places)}`,
-            image: 'https://source.unsplash.com/collection/483251',
+        const game = new GameReviews({
+            company: `${companies[random1000].company}, ${companies[random1000].title}`,
+            title: `${sample(descriptors)} ${sample(tags)}`,
+            image: 'https://source.unsplash.com/collection/4959235',
             description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus consequuntur dolorum impedit! Molestiae ratione iusto autem nisi et illum eligendi fugiat delectus rerum, aperiam hic voluptatibus harum laboriosam minima placeat?',
             price
         })
-        await camp.save();
+        await game.save();
     }
 }
 

@@ -1,0 +1,26 @@
+<% layout('layouts/boilerplate') %> 
+<h1>All Games</h1>
+<div>
+    <a href="/gamereviews/new">Add Game</a>
+</div>
+<ul>
+    <% for (let game of gamereviews) {%>
+        <div class="card mb-3">
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="<%= game.image %>" alt="" class="img-fluid">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title"><%= game.title %></h5>
+                        <p class="card-text"><%= game.description %></p>
+                        <p class="card-text">
+                            <small class="text-muted"><%= game.company %></small>
+                        </p>
+                        <a href="/gamereviews/<%= game._id %> " class="btn btn-primary">View <%= game.title %> </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% }%>
+</ul>

@@ -1,0 +1,16 @@
+<% layout('layouts/boilerplate') %> 
+<h1>Edit Game</h1>
+<form action="/gamereviews/<%= game._id %>?_method=PUT" method="POST">
+    <div>
+        <label for="title">Title</label>
+        <!-- game[title] groups content sent in POST under "game" -->
+        <input type="text" name="game[title]" id="title" value="<%= game.title %> ">
+    </div>
+    <div>
+        <label for="company">Company</label>
+        <!-- game[title] groups content sent in POST under "game" -->
+        <input type="text" name="game[company]" id="company" value="<%= game.company %> ">
+    </div>
+    <button>Update Game</button>
+</form>
+<a href="/gamereviews/<%= game._id %>">Back To Game</a>
