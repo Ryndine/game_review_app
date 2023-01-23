@@ -1,2 +1,6 @@
-- name: Set environment variable
-  run: echo "::set-env name=TEST_SECRET::${{ secrets.TEST_SECRET }}"
+jobs:
+  my-job:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set environment variable
+      run: echo "::set-env name=TEST_SECRET::${{ secrets.TEST_SECRET }}"
