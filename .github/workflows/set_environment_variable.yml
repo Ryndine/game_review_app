@@ -13,6 +13,18 @@ jobs:
     ## here it runs on ubuntu latest
     runs-on: ubuntu-latest 
     steps:
-      - name: step 1
-        ## Reference your environment variables
-        run: echo "The API key is:${{ secrets.TEST_SECRET }}"
+        - name: Git checkout
+          uses: actions/checkout@v2
+
+        - name: Use Node 12.x
+          uses: actions/setup-node@v1
+          with:
+            node-version: 12.x
+
+        - name: Install Dependencies (prod)
+          run: yarn install --frozen-lockfile --production
+
+        - name: Run Tests (JEST)
+          run: yarn test --ci --silent --testPathIgnorePatterns=experimental
+          env:
+            TEST_SECRET: ${{ secrets.TEST_SECRET }}

@@ -4,8 +4,6 @@ const mongoose = require('mongoose');
 const engine = require('ejs-mate');
 const methodOverride = require('method-override');
 const GameReviews = require('./models/gamereview');
-require('dotenv').config()
-
 
 mongoose.set('strictQuery', false); // deprecation warning 
 mongoose.connect('mongodb://localhost:27017/gamereview-app', {
@@ -13,6 +11,8 @@ mongoose.connect('mongodb://localhost:27017/gamereview-app', {
     // useCreateIndex: true, (no longer supported, always true)
     // useUnifiedTopology: true (no longer supported, always true)
 });
+
+console.log(process.env.TEST_SECRET)
 
 const db = mongoose.connection;
 // logic to check for error
