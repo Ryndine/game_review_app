@@ -2,8 +2,10 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const engine = require('ejs-mate');
+const catchAsync = require('./utils/catchAsync')
 const methodOverride = require('method-override');
 const GameReviews = require('./models/gamereview');
+
 
 mongoose.set('strictQuery', false); // deprecation warning 
 mongoose.connect('mongodb://localhost:27017/gamereview-app', {
@@ -39,49 +41,45 @@ app.get('/', (req, res) => {
 });
 
 // list of all the gamereviews
-app.get('/gamereviews', async(req, res) => {
+app.get('/gamereviews', catchAsync(async(req, res) => {
     const gamereviews = await GameReviews.find({});
     res.render('gamereviews/index', { gamereviews });
-});
+}));
 
 // create new game
 app.get('/gamereviews/new', (req, res) => {
     res.render('gamereviews/new');
-})
+});
 
-app.post('/gamereviews', async(req, res, next) => {
-    try {
+app.post('/gamereviews', catchAsync(async(req, res, next) => {
         const game = new GameReviews(req.body.game);
         await game.save();
         res.redirect(`/gamereviews/${game._id}`);
-    } catch(e) {
-        next(e)
-    }
-})
+}));
 
 // view a single game
-app.get('/gamereviews/:id', async(req, res) => {
+app.get('/gamereviews/:id', catchAsync(async(req, res) => {
     const game = await GameReviews.findById(req.params.id);
     res.render('gamereviews/show', { game });
-});
+}));
 
 // edit game
-app.get('/gamereviews/:id/edit', async(req, res) => {
+app.get('/gamereviews/:id/edit', catchAsync(async(req, res) => {
     const game = await GameReviews.findById(req.params.id);
     res.render('gamereviews/edit', { game });
-})
+}));
 
-app.put('/gamereviews/:id', async(req, res) => {
+app.put('/gamereviews/:id', catchAsync(async(req, res) => {
     const { id } = req.params;
     const game = await GameReviews.findByIdAndUpdate(id, { ...req.body.game });
     res.redirect(`/gamereviews/${game._id}`)
-});
+}));
 
-app.delete('/gamereviews/:id', async(req, res) => {
+app.delete('/gamereviews/:id', catchAsync(async(req, res) => {
     const { id } = req.params;
     await GameReviews.findByIdAndDelete(id);
     res.redirect('/gamereviews')
-})
+}));
 
 app.use((err, req, res, next) => {
     res.send('Oh boy, we gots an error!')
