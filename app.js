@@ -49,10 +49,14 @@ app.get('/gamereviews/new', (req, res) => {
     res.render('gamereviews/new');
 })
 
-app.post('/gamereviews', async(req, res) => {
-    const game = new GameReviews(req.body.game);
-    await game.save();
-    res.redirect(`/gamereviews/${game._id}`);
+app.post('/gamereviews', async(req, res, next) => {
+    try {
+        const game = new GameReviews(req.body.game);
+        await game.save();
+        res.redirect(`/gamereviews/${game._id}`);
+    } catch(e) {
+        next(e)
+    }
 })
 
 // view a single game
@@ -79,6 +83,9 @@ app.delete('/gamereviews/:id', async(req, res) => {
     res.redirect('/gamereviews')
 })
 
+app.use((err, req, res, next) => {
+    res.send('Oh boy, we gots an error!')
+})
 
 
 
