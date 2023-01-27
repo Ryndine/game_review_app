@@ -2,7 +2,8 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const engine = require('ejs-mate');
-const catchAsync = require('./utils/catchAsync')
+const catchAsync = require('./utils/catchAsync');
+const ExpressError = require('./utils/ExpressError')
 const methodOverride = require('method-override');
 const GameReviews = require('./models/gamereview');
 
@@ -52,6 +53,7 @@ app.get('/gamereviews/new', (req, res) => {
 });
 
 app.post('/gamereviews', catchAsync(async(req, res, next) => {
+    if(!req.body.game) throw new ExpressError('Invalid Game Data', 400)
         const game = new GameReviews(req.body.game);
         await game.save();
         res.redirect(`/gamereviews/${game._id}`);
@@ -81,9 +83,15 @@ app.delete('/gamereviews/:id', catchAsync(async(req, res) => {
     res.redirect('/gamereviews')
 }));
 
+app.all('*', (req, res, next) => {
+    next(new ExpressError('Page Not Found', 404))
+});
+
 app.use((err, req, res, next) => {
-    res.send('Oh boy, we gots an error!')
-})
+    const {statusCode = 500, message = "Something went wrong"} = err;
+    if(!err.message) err.message = 'Oh no, something is wrong.'
+    res.status(statusCode).render('error', { err });
+});
 
 
 
