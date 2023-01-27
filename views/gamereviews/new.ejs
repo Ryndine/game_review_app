@@ -1,15 +1,78 @@
 <% layout('layouts/boilerplate') %> 
-<form action="/gamereviews" method="POST">
-    <div>
-        <label for="title">Title</label>
-        <!-- game[title] groups content sent in POST under "game" -->
-        <input type="text" name="game[title]" id="title">
+<div class="row">
+    <h1 class="text-center">New Game</h1>
+    <div class="col-6 offset-3">
+        <form action="/gamereviews" method="POST" novalidate class="validated-form">
+            <div class="mb-3">
+                <label class="form-label" for="title">Title</label>
+                <!-- game[title] groups content sent in POST under "game" -->
+                <input class="form-control" type="text" name="game[title]" id="title" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="company">Company</label>
+                <!-- game[title] groups content sent in POST under "game" -->
+                <input class="form-control" type="text" name="game[company]" id="company" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="image">Image Url</label>
+                <!-- game[title] groups content sent in POST under "game" -->
+                <input class="form-control" type="text" name="game[image]" id="image" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="price">Game Price</label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="price-label">$</span>
+                    <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price"
+                        aria-describedby="price-label" name="game[price]" required>
+                    <div class="invalid-feedback">
+                        Please list a price.
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="description">Description</label>
+                <!-- game[title] groups content sent in POST under "game" -->
+                <textarea class="form-control" type="text" name="game[description]" id="description" 
+                    required></textarea>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-success">Add Game</button>
+            </div>
+        </form>
+        <a href="/gamereviews">All Games</a>
     </div>
-    <div>
-        <label for="company">Company</label>
-        <!-- game[title] groups content sent in POST under "game" -->
-        <input type="text" name="game[company]" id="company">
-    </div>
-    <button>Add Game</button>
-</form>
-<a href="/gamereviews">All Games</a>
+</div>
+
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+    'use strict'
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.querySelectorAll('.validated-form')
+
+    // Loop over them and prevent submission
+    Array.from(forms).forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+            }
+
+            form.classList.add('was-validated')
+        }, false)
+        })
+    })()
+</script>

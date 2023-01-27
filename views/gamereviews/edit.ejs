@@ -1,16 +1,59 @@
 <% layout('layouts/boilerplate') %> 
-<h1>Edit Game</h1>
-<form action="/gamereviews/<%= game._id %>?_method=PUT" method="POST">
-    <div>
-        <label for="title">Title</label>
-        <!-- game[title] groups content sent in POST under "game" -->
-        <input type="text" name="game[title]" id="title" value="<%= game.title %> ">
+<div class="row">
+    <h1 class="text-center">Edit Game</h1>
+    <div class="col-6 offset-3">
+        <form action="/gamereviews/<%= game._id %>?_method=PUT" method="POST" novalidate class="validated-form">
+            <div class="mb-3">
+                <label class="form-label" for="title">Title</label>
+                <!-- game[title] groups content sent in POST under "game" -->
+                <input class="form-control" type="text" name="game[title]" id="title"
+                    value="<%= game.title %>" required>
+                <div class="valid-feedack">
+                    Looks good!
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="company">Company</label>
+                <!-- game[title] groups content sent in POST under "game" -->
+                <input class="form-control" type="text" name="game[company]" id="company"
+                    value="<%= game.company %>" required>
+                <div class="valid-feedack">
+                    Looks good!
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="image">Image Url</label>
+                <!-- game[title] groups content sent in POST under "game" -->
+                <input class="form-control" type="text" name="game[image]" id="image"
+                    value="<%= game.image %>" required>
+                <div class="valid-feedack">
+                    Looks good!
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="price">Game Price</label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="price-label">$</span>
+                    <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price"
+                        aria-describedby="price-label" name="game[price]" value="<%= game.price %>" required>
+                    <div class="valid-feedack">
+                        Looks good!
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="description">Description</label>
+                <!-- game[title] groups content sent in POST under "game" -->
+                <textarea class="form-control" type="text" name="game[description]" id="description" 
+                    required><%= game.description %></textarea>
+                <div class="valid-feedack">
+                    Looks good!
+                </div>
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-info">Update Game</button>
+            </div>
+        </form>
+        <a href="/gamereviews/<%= game._id %>">Back To Game</a>
     </div>
-    <div>
-        <label for="company">Company</label>
-        <!-- game[title] groups content sent in POST under "game" -->
-        <input type="text" name="game[company]" id="company" value="<%= game.company %> ">
-    </div>
-    <button>Update Game</button>
-</form>
-<a href="/gamereviews/<%= game._id %>">Back To Game</a>
+</div>

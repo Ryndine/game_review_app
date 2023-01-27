@@ -12,7 +12,7 @@ mongoose.connect('mongodb://localhost:27017/gamereview-app', {
     // useUnifiedTopology: true (no longer supported, always true)
 });
 
-console.log(process.env.TEST_SECRET)
+// console.log(process.env.TEST_SECRET)
 
 const db = mongoose.connection;
 // logic to check for error
@@ -29,7 +29,8 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(methodOverride('_method'))
-// parse the "body"
+// parse the "body"979 8861 2634	
+
 app.use(express.urlencoded({extended: true}));
 
 

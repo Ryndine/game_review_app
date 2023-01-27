@@ -1,16 +1,25 @@
 <% layout('layouts/boilerplate') %> 
-<h1><%= game.title %> </h1>
-<h2><%= game.company %> </h2>
-<img src="<%= game.image %>" alt="">
-<p><%= game.description %></p>
-<p>
-    <a href="/gamereviews/<%= game._id %>/edit ">Edit</a>
-</p>
-<p>
-    <form action="/gamereviews/<%= game._id %>?_method=DELETE" method="POST">
-        <button>Delete</button>
-    </form>
-</p>
-<footer>
-    <a href="/gamereviews">All Games</a>
-</footer>
+<div class="row">
+    <div class="col-6 offset-3">
+        <div class="card mb-5">
+            <img src="<%= game.image %>" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title"><%= game.title %></h5>
+              <p class="card-text"><%= game.description %></p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item text-muted"><%= game.company %></li>
+                <li class="list-group-item">$<%= game.price %></li>
+            </ul>
+            <div class="card-body">
+                <a href="/gamereviews/<%= game._id %>/edit " class="card-link btn btn-info">Edit</a>
+                <form class="d-inline" action="/gamereviews/<%= game._id %>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger">Delete</button>
+                </form>            
+            </div>
+            <div class="card-footer text-muted">
+                <a href="/gamereviews">All Games</a>
+            </div>
+        </div>
+    </div>
+</div>
