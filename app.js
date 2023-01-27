@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const engine = require('ejs-mate');
+const Joi = require('joi')
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError')
 const methodOverride = require('method-override');
@@ -53,10 +54,24 @@ app.get('/gamereviews/new', (req, res) => {
 });
 
 app.post('/gamereviews', catchAsync(async(req, res, next) => {
-    if(!req.body.game) throw new ExpressError('Invalid Game Data', 400)
-        const game = new GameReviews(req.body.game);
-        await game.save();
-        res.redirect(`/gamereviews/${game._id}`);
+    // if(!req.body.game) throw new ExpressError('Invalid Game Data', 400)
+    const gameSchema = Joi.object({
+        game: Joi.object({
+            title: Joi.string().required(),
+            price: Joi.number().required().min(0),
+            image: Joi.string().required(),
+            description: Joi.string().required(),
+            company: Joi.string().required(),
+        }).required()
+    })
+    const { error }= gameSchema.validate(req.body);
+    if(error){
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    }
+    const game = new GameReviews(req.body.game);
+    await game.save();
+    res.redirect(`/gamereviews/${game._id}`);
 }));
 
 // view a single game
