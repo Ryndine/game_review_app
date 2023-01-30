@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const engine = require('ejs-mate');
-const Joi = require('joi')
+const { gameSchema } = require('./schemas.js')
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError')
 const methodOverride = require('method-override');
@@ -37,13 +37,24 @@ app.use(methodOverride('_method'))
 
 app.use(express.urlencoded({extended: true}));
 
+const validateGame = (req, res, next) => {
+
+    const { error }= gameSchema.validate(req.body);
+    if(error){
+        // error.details return  array, need to map over and join
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
+    }
+};
 
 app.get('/', (req, res) => {
     res.render('home')
 });
 
 // list of all the gamereviews
-app.get('/gamereviews', catchAsync(async(req, res) => {
+app.get('/gamereviews', validateGame, catchAsync(async(req, res) => {
     const gamereviews = await GameReviews.find({});
     res.render('gamereviews/index', { gamereviews });
 }));
@@ -55,20 +66,6 @@ app.get('/gamereviews/new', (req, res) => {
 
 app.post('/gamereviews', catchAsync(async(req, res, next) => {
     // if(!req.body.game) throw new ExpressError('Invalid Game Data', 400)
-    const gameSchema = Joi.object({
-        game: Joi.object({
-            title: Joi.string().required(),
-            price: Joi.number().required().min(0),
-            image: Joi.string().required(),
-            description: Joi.string().required(),
-            company: Joi.string().required(),
-        }).required()
-    })
-    const { error }= gameSchema.validate(req.body);
-    if(error){
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    }
     const game = new GameReviews(req.body.game);
     await game.save();
     res.redirect(`/gamereviews/${game._id}`);
@@ -81,7 +78,7 @@ app.get('/gamereviews/:id', catchAsync(async(req, res) => {
 }));
 
 // edit game
-app.get('/gamereviews/:id/edit', catchAsync(async(req, res) => {
+app.get('/gamereviews/:id/edit', validateGame, catchAsync(async(req, res) => {
     const game = await GameReviews.findById(req.params.id);
     res.render('gamereviews/edit', { game });
 }));
